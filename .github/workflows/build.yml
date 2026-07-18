@@ -12,9 +12,11 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
-      - name: Build with Gradle
+      - name: Init Gradle and Build
         run: |
-          # نستخدم gradle wrapper مباشرة إذا كان متاحاً أو نثبت gradle
+          # ننشئ ملف الإعدادات الأساسي ليتمكن Gradle من العمل
+          echo "rootProject.name = 'MyPaymentApp'" > settings.gradle
+          # نقوم بالبناء
           gradle assembleDebug
       - name: Upload APK
         uses: actions/upload-artifact@v4
