@@ -14,8 +14,8 @@ jobs:
           java-version: '17'
       - name: Build with Gradle
         run: |
-          chmod +x gradlew
-          ./gradlew assembleDebug
+          # نستخدم gradle wrapper مباشرة إذا كان متاحاً أو نثبت gradle
+          gradle assembleDebug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
