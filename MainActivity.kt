@@ -1,3 +1,5 @@
+package com.example.myapp
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -9,19 +11,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // ربط العناصر التي في الواجهة بالبرمجة
         val etMemberName = findViewById<EditText>(R.id.etMemberName)
         val etAmount = findViewById<EditText>(R.id.etAmount)
         val etDate = findViewById<EditText>(R.id.etDate)
         val btnSave = findViewById<Button>(R.id.btnSave)
 
-        // إضافة وظيفة لزر الحفظ
         btnSave.setOnClickListener {
             val name = etMemberName.text.toString()
             val amountStr = etAmount.text.toString()
             val date = etDate.text.toString()
 
-            // التحقق من أن الحقول ليست فارغة
             if (name.isNotEmpty() && amountStr.isNotEmpty() && date.isNotEmpty()) {
                 val payment = PaymentRecord(name, amountStr.toDouble(), date)
                 Toast.makeText(this, "تم حفظ بيانات: ${payment.memberName}", Toast.LENGTH_SHORT).show()
