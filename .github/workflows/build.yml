@@ -40,7 +40,7 @@ jobs:
           }
           EOF
           
-          # Create app build.gradle
+          # Create app build.gradle with strict Java 17 compatibility
           cat << 'EOF' > app/build.gradle
           plugins {
               id 'com.android.application'
@@ -55,6 +55,13 @@ jobs:
                   targetSdk 34
                   versionCode 1
                   versionName "1.0"
+              }
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_17
+                  targetCompatibility JavaVersion.VERSION_17
+              }
+              kotlinOptions {
+                  jvmTarget = '17'
               }
           }
           EOF
