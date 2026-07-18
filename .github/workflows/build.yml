@@ -1,100 +1,22 @@
 name: Build Android APK
-
 on:
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-
-      - name: Setup Gradle 8.5
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: '8.5'
-
-      - name: Setup Android project structure
-        run: |
-          mkdir -p app/src/main/java/com/example/myapp
-          mkdir -p app/src/main/res/layout
-          
-          # نقل الملفات البرمجية بدقة إلى مسار الحزمة الصحيح
-          if [ -f MainActivity.kt ]; then cp MainActivity.kt app/src/main/java/com/example/myapp/; fi
-          if [ -f PaymentRecord.kt ]; then cp PaymentRecord.kt app/src/main/java/com/example/myapp/; fi
-          if [ -f activity_main.xml ]; then cp activity_main.xml app/src/main/res/layout/; fi
-          
-          # حل المشكلة الأخيرة وتفعيل AndroidX
-          echo "android.useAndroidX=true" > gradle.properties
-          
-          # إنشاء ملف الإعدادات الجذري
-          cat << 'EOF' > build.gradle
-          plugins {
-              id 'com.android.application' version '8.2.0' apply false
-              id 'org.jetbrains.kotlin.android' version '1.9.0' apply false
-          }
-          EOF
-          
-          # إنشاء ملف إعدادات التطبيق متوافق مع جافا 17 وتضمين المكتبات
-          cat << 'EOF' > app/build.gradle
-          plugins {
-              id 'com.android.application'
-              id 'org.jetbrains.kotlin.android'
-          }
-          android {
-              namespace 'com.example.myapp'
-              compileSdk 34
-              defaultConfig {
-                  applicationId "com.example.myapp"
-                  minSdk 24
-                  targetSdk 34
-                  versionCode 1
-                  versionName "1.0"
-              }
-              compileOptions {
-                  sourceCompatibility JavaVersion.VERSION_17
-                  targetCompatibility JavaVersion.VERSION_17
-              }
-              kotlinOptions {
-                  jvmTarget = '17'
-              }
-          }
-          dependencies {
-              implementation 'androidx.core:core-ktx:1.12.0'
-              implementation 'androidx.appcompat:appcompat:1.6.1'
-              implementation 'com.google.android.material:material:1.11.0'
-          }
-          EOF
-          
-          # إنشاء المانيفست المضمون
-          cat << 'EOF' > app/src/main/AndroidManifest.xml
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <application android:label="MyPaymentApp" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-                  <activity android:name="com.example.myapp.MainActivity" android:exported="true">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          EOF
-          
-          # إنشاء ملف الـ settings
-          echo "pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }; dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }; rootProject.name = 'MyPaymentApp'; include ':app'" > settings.gradle
-
       - name: Build with Gradle
-        run: gradle assembleDebug
-
-      - name: Upload APK Artifact
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
