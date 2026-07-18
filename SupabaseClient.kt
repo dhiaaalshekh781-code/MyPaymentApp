@@ -3,7 +3,6 @@ package com.example.myapp
 import io.github.jan_tennert.supabase.createSupabaseClient
 import io.github.jan_tennert.supabase.postgrest.Postgrest
 
-// قمنا بتعريف object لنتمكن من الوصول له من أي مكان
 object SupabaseClient {
     val client = createSupabaseClient(
         supabaseUrl = "https://bexlpwqzmwaloafnrrle.supabase.co",
