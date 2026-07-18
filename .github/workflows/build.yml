@@ -23,12 +23,12 @@ jobs:
           mkdir -p app/src/main/res/layout
           
           # Move files to proper Android structure
-          mv MainActivity.kt app/src/main/java/com/example/myapp/
-          mv PaymentRecord.kt app/src/main/java/com/example/myapp/
-          mv activity_main.xml app/src/main/res/layout/
+          if [ -f MainActivity.kt ]; then mv MainActivity.kt app/src/main/java/com/example/myapp/; fi
+          if [ -f PaymentRecord.kt ]; then mv PaymentRecord.kt app/src/main/java/com/example/myapp/; fi
+          if [ -f activity_main.xml ]; then mv activity_main.xml app/src/main/res/layout/; fi
           
           # Create minimal build.gradle files
-          echo "plugins { id 'com.android.application' id 'org.jetbrains.kotlin.android' }" > build.gradle
+          echo "plugins { id 'com.android.application' id 'org.jetbrains.kotlin.android' version '1.9.0' apply false }" > build.gradle
           
           cat << 'EOF' > app/build.gradle
           plugins {
@@ -51,8 +51,8 @@ jobs:
           # Create minimal AndroidManifest.xml
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <application android:label="MyPaymentApp" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-                  <activity android:name=".MainActivity" android:exported="true">
+              <application android:label="MyPaymentApp">
+                  <activity android:name="com.example.myapp.MainActivity" android:exported="true">
                       <intent-filter>
                           <action android:name="android.intent.action.MAIN" />
                           <category android:name="android.intent.category.LAUNCHER" />
@@ -63,10 +63,10 @@ jobs:
           EOF
           
           # Create settings.gradle
-          echo "include ':app'" > settings.gradle
+          echo "pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }; dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }; rootProject.name = 'MyPaymentApp'; include ':app'" > settings.gradle
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Install Gradle Wrapper
+        run: gradle wrapper --gradle-version 8.2
 
       - name: Build with Gradle
         run: ./gradlew assembleDebug
