@@ -11,10 +11,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'zulu'
-      - name: Use Gradle 8.5
-        run: gradle wrapper --gradle-version 8.5
+      # هنا نستخدم gradle الموجود في الـ PATH مباشرة
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
+        run: gradle :app:assembleDebug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
