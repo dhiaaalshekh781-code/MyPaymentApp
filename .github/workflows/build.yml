@@ -27,12 +27,12 @@ jobs:
           mkdir -p app/src/main/java/com/example/myapp
           mkdir -p app/src/main/res/layout
           
-          # Move files to proper Android structure
-          if [ -f MainActivity.kt ]; then mv MainActivity.kt app/src/main/java/com/example/myapp/; fi
-          if [ -f PaymentRecord.kt ]; then mv PaymentRecord.kt app/src/main/java/com/example/myapp/; fi
-          if [ -f activity_main.xml ]; then mv activity_main.xml app/src/main/res/layout/; fi
+          # نقل الملفات البرمجية بدقة إلى مسار الحزمة الصحيح
+          if [ -f MainActivity.kt ]; then cp MainActivity.kt app/src/main/java/com/example/myapp/; fi
+          if [ -f PaymentRecord.kt ]; then cp PaymentRecord.kt app/src/main/java/com/example/myapp/; fi
+          if [ -f activity_main.xml ]; then cp activity_main.xml app/src/main/res/layout/; fi
           
-          # Create well-formatted root build.gradle
+          # إنشاء ملف الإعدادات الجذري
           cat << 'EOF' > build.gradle
           plugins {
               id 'com.android.application' version '8.2.0' apply false
@@ -40,7 +40,7 @@ jobs:
           }
           EOF
           
-          # Create app build.gradle with strict Java 17 compatibility
+          # إنشاء ملف إعدادات التطبيق متوافق مع جافا 17
           cat << 'EOF' > app/build.gradle
           plugins {
               id 'com.android.application'
@@ -66,10 +66,10 @@ jobs:
           }
           EOF
           
-          # Create minimal AndroidManifest.xml
+          # إنشاء المانيفست المضمون
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <application android:label="MyPaymentApp">
+              <application android:label="MyPaymentApp" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
                   <activity android:name="com.example.myapp.MainActivity" android:exported="true">
                       <intent-filter>
                           <action android:name="android.intent.action.MAIN" />
@@ -80,7 +80,7 @@ jobs:
           </manifest>
           EOF
           
-          # Create settings.gradle
+          # إنشاء ملف الـ settings
           echo "pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }; dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }; rootProject.name = 'MyPaymentApp'; include ':app'" > settings.gradle
 
       - name: Build with Gradle
