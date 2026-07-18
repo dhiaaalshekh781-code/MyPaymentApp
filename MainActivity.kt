@@ -32,29 +32,26 @@ class MainActivity : AppCompatActivity() {
 
             if (name.isNotEmpty() && amountStr.isNotEmpty()) {
                 
-                // جلب التاريخ والوقت الحالي تلقائياً من نظام الهاتف
                 val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
                 val currentDate = sdf.format(Date())
                 
-                // إنشاء السجل وحفظه
                 val payment = PaymentRecord(name, amountStr.toDouble(), currentDate)
                 paymentList.add(payment)
-                        // إضافة للربط مع Supabase
-        GlobalScope.launch {
-            try {
-                supabase.from("societies").insert(
-                    mapOf(
-                        "name" to name, // هنا ضع المتغير الذي يحمل اسم العضو
-                        "start_date" to currentDate, // استخدم المتغير الموجود عندك
-                        "total_members" to 0 // أو القيمة التي تريدها
-                    )
-                )
-            } catch (e: Exception) {
-                // خطأ في الإرسال
-            }
-        }
 
-                // تحديث شكل الجدول في الأسفل ليعرض كل البيانات المرتبة
+                GlobalScope.launch {
+                    try {
+                        SupabaseClient.client.from("societies").insert(
+                            mapOf(
+                                "name" to name,
+                                "start_date" to currentDate,
+                                "total_members" to 0
+                            )
+                        )
+                    } catch (e: Exception) {
+                        // في حال فشل الاتصال
+                    }
+                }
+
                 val displayText = StringBuilder()
                 for ((index, record) in paymentList.withIndex()) {
                     displayText.append("${index + 1}) الاسم: ${record.memberName} | المبلغ: ${record.amount} | التاريخ: $currentDate\n")
@@ -62,11 +59,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 tvRecordsList.text = displayText.toString()
 
-                // تنظيف الخانات للكتابة من جديد
                 etMemberName.text.clear()
                 etAmount.text.clear()
 
-                Toast.makeText(this, "تم الحفظ بتاريخ $currentDate", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "تم الحفظ", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "يرجى تعبئة الاسم والمبلغ", Toast.LENGTH_SHORT).show()
             }
