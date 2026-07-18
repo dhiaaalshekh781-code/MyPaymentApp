@@ -11,7 +11,19 @@ import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import io.github.jan_tennert.supabase.createSupabaseClient
+import io.github.jan_tennert.supabase.postgrest.Postgrest
 import io.github.jan_tennert.supabase.postgrest.from
+
+// تعريف الكلاس للاتصال بـ Supabase داخل نفس الملف
+object SupabaseClient {
+    val client = createSupabaseClient(
+        supabaseUrl = "https://bexlpwqzmwaloafnrrle.supabase.co",
+        supabaseKey = "sb_publishable_GiIkF-_TW4vmTRnYbeQ49w_8_fx0PjL"
+    ) {
+        install(Postgrest)
+    }
+}
 
 class MainActivity : AppCompatActivity() {
     
@@ -31,7 +43,6 @@ class MainActivity : AppCompatActivity() {
             val amountStr = etAmount.text.toString()
 
             if (name.isNotEmpty() && amountStr.isNotEmpty()) {
-                
                 val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
                 val currentDate = sdf.format(Date())
                 
