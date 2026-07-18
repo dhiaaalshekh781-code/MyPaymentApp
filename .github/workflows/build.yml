@@ -40,7 +40,7 @@ jobs:
           }
           EOF
           
-          # إنشاء ملف إعدادات التطبيق متوافق مع جافا 17
+          # إنشاء ملف إعدادات التطبيق متوافق مع جافا 17 وتضمين المكتبات
           cat << 'EOF' > app/build.gradle
           plugins {
               id 'com.android.application'
@@ -63,6 +63,11 @@ jobs:
               kotlinOptions {
                   jvmTarget = '17'
               }
+          }
+          dependencies {
+              implementation 'androidx.core:core-ktx:1.12.0'
+              implementation 'androidx.appcompat:appcompat:1.6.1'
+              implementation 'com.google.android.material:material:1.11.0'
           }
           EOF
           
