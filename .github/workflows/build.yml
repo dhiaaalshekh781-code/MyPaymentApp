@@ -32,6 +32,9 @@ jobs:
           if [ -f PaymentRecord.kt ]; then cp PaymentRecord.kt app/src/main/java/com/example/myapp/; fi
           if [ -f activity_main.xml ]; then cp activity_main.xml app/src/main/res/layout/; fi
           
+          # حل المشكلة الأخيرة وتفعيل AndroidX
+          echo "android.useAndroidX=true" > gradle.properties
+          
           # إنشاء ملف الإعدادات الجذري
           cat << 'EOF' > build.gradle
           plugins {
