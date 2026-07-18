@@ -65,11 +65,8 @@ jobs:
           # Create settings.gradle
           echo "pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }; dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }; rootProject.name = 'MyPaymentApp'; include ':app'" > settings.gradle
 
-      - name: Install Gradle Wrapper
-        run: gradle wrapper --gradle-version 8.2
-
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
+        run: gradle assembleDebug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
