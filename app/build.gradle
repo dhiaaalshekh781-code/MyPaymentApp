@@ -1,12 +1,11 @@
 plugins {
     id 'com.android.application' version '8.2.0'
-    id 'org.jetbrains.kotlin.android' version '1.9.0'
+    id 'org.jetbrains.kotlin.android' version '1.8.0' // تم تقليل نسخة كوتلن للتوافق
 }
 
 android {
     namespace 'com.example.mypaymentapp'
     compileSdk 34
-
     defaultConfig {
         applicationId "com.example.mypaymentapp"
         minSdk 24
