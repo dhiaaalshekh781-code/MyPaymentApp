@@ -9,6 +9,9 @@ import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import io.github.jan_tennert.supabase.postgrest.from
 
 class MainActivity : AppCompatActivity() {
     
@@ -36,7 +39,21 @@ class MainActivity : AppCompatActivity() {
                 // إنشاء السجل وحفظه
                 val payment = PaymentRecord(name, amountStr.toDouble(), currentDate)
                 paymentList.add(payment)
-                
+                        // إضافة للربط مع Supabase
+        GlobalScope.launch {
+            try {
+                supabase.from("societies").insert(
+                    mapOf(
+                        "name" to name, // هنا ضع المتغير الذي يحمل اسم العضو
+                        "start_date" to currentDate, // استخدم المتغير الموجود عندك
+                        "total_members" to 0 // أو القيمة التي تريدها
+                    )
+                )
+            } catch (e: Exception) {
+                // خطأ في الإرسال
+            }
+        }
+
                 // تحديث شكل الجدول في الأسفل ليعرض كل البيانات المرتبة
                 val displayText = StringBuilder()
                 for ((index, record) in paymentList.withIndex()) {
