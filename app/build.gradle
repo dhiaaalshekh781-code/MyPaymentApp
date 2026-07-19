@@ -6,6 +6,16 @@ plugins {
 android {
     namespace 'com.example.mypaymentapp'
     compileSdk 34
+    
+    // توحيد إصدارات الجافا هنا
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
     defaultConfig {
         applicationId "com.example.mypaymentapp"
         minSdk 24
