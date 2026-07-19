@@ -11,9 +11,13 @@ jobs:
         with:
           java-version: '17'
           distribution: 'zulu'
-      # هذا الأمر يستخدم gradle المثبت في السيرفر مباشرة دون الحاجة لملفات gradle wrapper
+      # هنا نقوم بتثبيت نسخة Gradle متوافقة تماماً
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.1'
       - name: Build with Gradle
-        run: gradle :app:assembleDebug --stacktrace
+        run: gradle :app:assembleDebug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
