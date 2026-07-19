@@ -11,9 +11,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'zulu'
-      # هنا نستخدم gradle الموجود في الـ PATH مباشرة
+      # هذا الأمر يستخدم gradle المثبت في السيرفر مباشرة دون الحاجة لملفات gradle wrapper
       - name: Build with Gradle
-        run: gradle :app:assembleDebug
+        run: gradle :app:assembleDebug --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
